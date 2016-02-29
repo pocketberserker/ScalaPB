@@ -12,11 +12,12 @@ private class ProtoInputStream(var state: State) extends InputStream {
   def drainTo(target: OutputStream): Int = {
     val bytesWritten = state match {
       case NotStarted(message) =>
+        val written = message.serializedSize
         message.writeTo(target)
-        message.serializedSize
+        written
       case Partial(partial) =>
         ByteStreams.copy(partial, target).toInt
-      case Done => throw new IllegalStateException()
+      case Done => 0
     }
     state = Done
     bytesWritten
