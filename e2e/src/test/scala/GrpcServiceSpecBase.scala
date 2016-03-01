@@ -27,10 +27,13 @@ abstract class GrpcServiceSpecBase extends FunSpec with MustMatchers {
     try {
       server.start()
       val channel = NettyChannelBuilder.forAddress("localhost", port).negotiationType(NegotiationType.PLAINTEXT).build()
-      f(channel)
+      try {
+        f(channel)
+      } finally {
+        channel.shutdownNow()
+      }
     } finally {
-      server.shutdown()
-      server.awaitTermination(3000, TimeUnit.MILLISECONDS)
+      server.shutdownNow()
     }
   }
 
