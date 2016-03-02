@@ -64,7 +64,7 @@ lazy val runtime = crossProject.crossType(CrossType.Full).in(file("scalapb-runti
   .jvmSettings(
     // Add JVM-specific settings here
     libraryDependencies ++= Seq(
-      "com.google.protobuf" % "protobuf-java" % "3.0.0-beta-1"
+      "com.google.protobuf" % "protobuf-java" % "3.0.0-beta-2"
     )
   )
   .jsSettings(
