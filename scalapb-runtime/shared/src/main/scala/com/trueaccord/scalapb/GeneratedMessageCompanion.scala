@@ -97,7 +97,12 @@ trait JavaProtoSupport[ScalaPB, JavaPB] {
 }
 
 trait GeneratedMessageCompanion[A <: GeneratedMessage with Message[A]] {
-  def parseFrom(input: CodedInputStream): A = LiteParser.parseFrom(this, input)
+  def parseFrom(input: CodedInputStream): A = {
+    input.setSizeLimit(Integer.MAX_VALUE)
+    val m = LiteParser.parseFrom(this, input)
+    input.checkLastTagWas(0)
+    m
+  }
 
   def parseFrom(input: InputStream): A = parseFrom(CodedInputStream.newInstance(input))
 
